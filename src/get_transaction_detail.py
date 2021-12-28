@@ -20,10 +20,14 @@ WETH_WITHDRAWAL_TOPIC = '0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a
 ERC20_TRANSFER_TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
 ERC20_APPROVE_TOPIC = '0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925'
 
-PANCAKE_CONTRACT_ADDRESS = '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82'
+CAKE_CONTRACT_ADDRESS = '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82'
 WBNB_CONTRACT_ADDRESS = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
 
 PANCAKE_ROUTER_V2_ADDRESS = "0x10ed43c718714eb63d5aa57b78b54704e256024e"
+PANCAKE_LP_ADDRESS = "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
+
+PANCAKE_MINT_TOPIC = "0x4c209b5fc8ad50758f13e2e1088ba56a560dff690a1c6fef26394f4c03821c4f"
+PANCAKE_BURN_TOPIC = ""
 
 BSC_URL = "https://bsc-dataseed.binance.org/"
 
@@ -40,6 +44,7 @@ def get_transaction_detail(transaction, transaction_number, my_address, platform
         address: account address of the transaction
         platform_name: name of the platform(ex. PancakeSwap)
     '''
+
     transaction_id = transaction.get("hash")
     time_stamp = transaction.get("timeStamp")
     date_object = datetime.fromtimestamp(int(time_stamp))
@@ -64,25 +69,7 @@ def get_transaction_detail(transaction, transaction_number, my_address, platform
     f_caaj = open(file_dir, "a", encoding='UTF-8')
     writer_caaj = csv.writer(f_caaj)
 
-    if len(logs) == 0:
-        # transfer(waki -> nishi)
-        # transfer info
-        # time = date_object.strftime("%Y-%m-%d %H:%M:%S")
-        # platform = platform_name
-        # transaction_id = transaction_id
-        debit_title = "SPOT"
-        debit_amount = str(Decimal(transaction.get("value"))/gwei)
-        debit_from = bsc_receipt['to'].lower()
-        debit_to = bsc_receipt['from'].lower()
-        credit_title = "SPOT"
-        credit_amount = str(Decimal(transaction.get("value"))/gwei)
-        credit_from = bsc_receipt['from'].lower()
-        credit_to = bsc_receipt['to'].lower()
-        comment = "transfer"
-        writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
-                              debit_from, debit_to, credit_title, credit_amount,
-                              credit_from, credit_to, comment])
-
+    def transaction_fee(comment_message):
         # fee
         debit_title = "FEE"
         debit_amount = {"BNB": str(debit_amount_fee)}
@@ -92,10 +79,32 @@ def get_transaction_detail(transaction, transaction_number, my_address, platform
         credit_amount = {"BNB": str(debit_amount_fee)}
         credit_from = bsc_receipt['from'].lower()
         credit_to = "0x0000000000000000000000000000000000000000"
-        comment = "transfer Fee"
+        comment = comment_message
         writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
                               debit_from, debit_to, credit_title, credit_amount,
                               credit_from, credit_to, comment])
+
+    if len(logs) == 0:
+        # transfer(waki -> nishi)
+        # transfer info
+        # time = date_object.strftime("%Y-%m-%d %H:%M:%S")
+        # platform = platform_name
+        # transaction_id = transaction_id
+        debit_title = "SPOT"
+        debit_amount = {"BNB": str(Decimal(transaction.get("value"))/gwei)}
+        debit_from = bsc_receipt['to'].lower()
+        debit_to = bsc_receipt['from'].lower()
+        credit_title = "SPOT"
+        credit_amount = {"BNB": str(Decimal(transaction.get("value"))/gwei)}
+        credit_from = bsc_receipt['from'].lower()
+        credit_to = bsc_receipt['to'].lower()
+        comment = "transfer"
+        writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+                              debit_from, debit_to, credit_title, credit_amount,
+                              credit_from, credit_to, comment])
+
+        # fee
+        transaction_fee("transfer(waki -> nishi)")
 
     elif len(logs) == 1 and logs[0]['topics'][0].hex().lower() == ERC20_APPROVE_TOPIC:
         # Approve fee
@@ -129,33 +138,83 @@ def get_transaction_detail(transaction, transaction_number, my_address, platform
                               debit_from, debit_to, credit_title, credit_amount,
                               credit_from, credit_to, comment])
 
-        debit_title = "FEE"
-        debit_amount = {"BNB": str(debit_amount_fee)}
-        debit_from = "0x0000000000000000000000000000000000000000"
-        debit_to = bsc_receipt['from'].lower()
-        credit_title = "SPOT"
-        credit_amount = {"BNB": str(debit_amount_fee)}
-        credit_from = bsc_receipt['from'].lower()
-        credit_to = "0x0000000000000000000000000000000000000000"
-        comment = "Exchange Fee"
-        writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
-                              debit_from, debit_to, credit_title, credit_amount,
-                              credit_from, credit_to, comment])
+        transaction_fee("exchange(BNB -> CAKE")
 
+    # elif logs[0]['topics'][0].hex().lower() == ERC20_APPROVE_TOPIC and len(logs) != 1:
+    #     # remove liquidity
+    #     debit_amout_bnb = int(logs[0]['data'], 16)/gwei
+    #     debit_amount_cake = int(logs[2]['data'], 16)/gwei
+    #     credit_amount_lp = int(logs[5]['data'], 16)/gwei
+    #     debit_title = "SPOT"
+    #     debit_amount = {"CAKE": str(credit_amount_lp)}
+    #     debit_from = PANCAKE_ROUTER_V2_ADDRESS
+    #     debit_to = my_address
+    #     credit_title = "LIQUIDITY"
+    #     credit_amount = {"BNB": str(debit_amout_bnb),
+    #                      "CAKE": str(debit_amount_cake)}
+    #     credit_from = my_address
+    #     credit_to = PANCAKE_ROUTER_V2_ADDRESS
+    #     comment = "exchange(BNB -> CAKE)"
+    #     writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+    #                           debit_from, debit_to, credit_title, credit_amount,
+    #                           credit_from, credit_to, comment])
+
+    #     transaction_fee("rtemove liquidity")
+
+    elif logs[0]['topics'][0].hex().lower() == ERC20_TRANSFER_TOPIC:
+        if logs[2]['topics'][0].hex().lower() == ERC20_TRANSFER_TOPIC:
+            # transfer(CAKE -> BNB)
+            debit_title = "SPOT"
+            debit_amount = {"BNB": str(Decimal(transaction.get("value"))/gwei)}
+            debit_from = bsc_receipt['to'].lower()
+            debit_to = bsc_receipt['from'].lower()
+            credit_title = "SPOT"
+            credit_amount = {"BNB": str(
+                Decimal(transaction.get("value"))/gwei)}
+            credit_from = bsc_receipt['from'].lower()
+            credit_to = bsc_receipt['to'].lower()
+            comment = "transfer(CAKE TO BNB)"
+            writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+                                  debit_from, debit_to, credit_title, credit_amount,
+                                  credit_from, credit_to, comment])
+
+         # fee
+            transaction_fee("transfer CAKE TO BNB")
+        elif logs[2]['topics'][0].hex().lower() == WETH_DEPOSIT_TOPIC:
+            # add liquidity
+            debit_amout_bnb = int(logs[0]['data'], 16)/gwei
+            debit_amount_cake = int(logs[2]['data'], 16)/gwei
+            credit_amount_lp = int(logs[5]['data'], 16)/gwei
+            debit_title = "LIQUIDITY"
+            debit_amount = {PANCAKE_LP_ADDRESS: str(credit_amount_lp)}
+            debit_from = PANCAKE_ROUTER_V2_ADDRESS
+            debit_to = my_address
+            credit_title = "SPOT"
+            credit_amount = {"BNB": str(debit_amout_bnb),
+                             "CAKE": str(debit_amount_cake)}
+            credit_from = my_address
+            credit_to = PANCAKE_ROUTER_V2_ADDRESS
+            comment = "add liquidity"
+            writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+                                  debit_from, debit_to, credit_title, credit_amount,
+                                  credit_from, credit_to, comment])
+        # fee
+            transaction_fee("Add liquidity fee")
     f_caaj.close()
 # make caaj file
 
-    # if logs[0]["topics"][0].hex().lower() == ERC20_APPROVE_TOPIC:
-    # debit_amount_fee = Decimal(
-    #     bsc_receipt['gasUsed'])*Decimal(transaction['gasPrice'])/gwei
-    # debit_title = "FEE"
-    # debit_amount = debit_amount_fee
-    # debit_from = "0x0000000000000000000000000000000000000000"
-    # debit_to = address
-    # credit_title = "SPOT"
-    # credit_amount = debit_amount_fee
-    # credit_from = address
-    # credit_to = "0x0000000000000000000000000000000000000000"
-    # writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
-    #                       debit_from, debit_to, credit_title, credit_amount,
-    #                       credit_from, credit_to])
+
+# if logs[0]["topics"][0].hex().lower() == ERC20_APPROVE_TOPIC:
+# debit_amount_fee = Decimal(
+#     bsc_receipt['gasUsed'])*Decimal(transaction['gasPrice'])/gwei
+# debit_title = "FEE"
+# debit_amount = debit_amount_fee
+# debit_from = "0x0000000000000000000000000000000000000000"
+# debit_to = address
+# credit_title = "SPOT"
+# credit_amount = debit_amount_fee
+# credit_from = address
+# credit_to = "0x0000000000000000000000000000000000000000"
+# writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+#                       debit_from, debit_to, credit_title, credit_amount,
+#                       credit_from, credit_to])
