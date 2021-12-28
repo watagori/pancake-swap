@@ -140,26 +140,27 @@ def get_transaction_detail(transaction, transaction_number, my_address, platform
 
         transaction_fee("exchange(BNB -> CAKE")
 
-    # elif logs[0]['topics'][0].hex().lower() == ERC20_APPROVE_TOPIC and len(logs) != 1:
-    #     # remove liquidity
-    #     debit_amout_bnb = int(logs[0]['data'], 16)/gwei
-    #     debit_amount_cake = int(logs[2]['data'], 16)/gwei
-    #     credit_amount_lp = int(logs[5]['data'], 16)/gwei
-    #     debit_title = "SPOT"
-    #     debit_amount = {"CAKE": str(credit_amount_lp)}
-    #     debit_from = PANCAKE_ROUTER_V2_ADDRESS
-    #     debit_to = my_address
-    #     credit_title = "LIQUIDITY"
-    #     credit_amount = {"BNB": str(debit_amout_bnb),
-    #                      "CAKE": str(debit_amount_cake)}
-    #     credit_from = my_address
-    #     credit_to = PANCAKE_ROUTER_V2_ADDRESS
-    #     comment = "exchange(BNB -> CAKE)"
-    #     writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
-    #                           debit_from, debit_to, credit_title, credit_amount,
-    #                           credit_from, credit_to, comment])
+    elif logs[0]['topics'][0].hex().lower() == ERC20_APPROVE_TOPIC and len(logs) != 1:
+        # remove liquidity
+        credit_amout_bnb = int(logs[8]['data'], 16)/gwei
+        credit_amount_cake = int(logs[9]['data'], 16)/gwei
+        debit_amount_lp = int(logs[0]['data'], 16)/gwei
+        debit_title = "SPOT"
+        debit_amount = {"BNB": str(credit_amout_bnb),
+                        "CAKE": str(credit_amount_cake)}
+        debit_from = my_address
+        debit_to = PANCAKE_ROUTER_V2_ADDRESS
+        credit_title = "LIQUIDITY"
+        credit_amount = {PANCAKE_LP_ADDRESS: str(debit_amount_lp),
+                         }
+        credit_from = PANCAKE_ROUTER_V2_ADDRESS
+        credit_to = my_address
+        comment = "remove liquidity"
+        writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+                              debit_from, debit_to, credit_title, credit_amount,
+                              credit_from, credit_to, comment])
 
-    #     transaction_fee("rtemove liquidity")
+        transaction_fee("remove liquidity fee")
 
     elif logs[0]['topics'][0].hex().lower() == ERC20_TRANSFER_TOPIC:
         if logs[2]['topics'][0].hex().lower() == ERC20_TRANSFER_TOPIC:
