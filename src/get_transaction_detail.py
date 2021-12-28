@@ -19,7 +19,6 @@ ERC20_APPROVE_TOPIC = '0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac
 BSC_URL = "https://bsc-dataseed.binance.org/"
 
 w3 = Web3(Web3.HTTPProvider(BSC_URL))
-
 gwei = Decimal(1000000000000000000)
 
 
@@ -36,46 +35,71 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
     time_stamp = transaction.get("timeStamp")
     date_object = datetime.fromtimestamp(int(time_stamp))
     # eth_value = Decimal(value)/gwei
-    f_detail = open("dist/transactions_detail.csv", "a", encoding='UTF-8')
-    writer_detail = csv.writer(f_detail)
 
     bsc_receipt = w3.eth.get_transaction_receipt(transaction_id)
     logs = bsc_receipt['logs']
 
-    writer_detail.writerow(
-        [date_object, "PancakeSwap", transaction_id, bsc_receipt['from'], bsc_receipt['to']])
-    f_detail.close()
-
     # common caaj'values
-    time = time_stamp
+    time = date_object.strftime("%Y-%m-%d %H:%M:%S")
     platform = platform_name
     # transaction_id = transaction_id
-
     debit_amount_fee = Decimal(
         bsc_receipt['gasUsed'])*Decimal(transaction['gasPrice'])/gwei
-    credit_amount = Decimal(transaction.get("value"))/gwei
+    # credit_amount = Decimal(transaction.get("value"))/gwei
+
+    f_caaj = open("dist/caaj_pancake.csv", "w", encoding='UTF-8')
+    writer_caaj = csv.writer(f_caaj)
+
+
+# transfer(waki -> nishi)
+    try:
+        logs[0]
+    except IndexError:
+        # transfer info
+        # time = date_object.strftime("%Y-%m-%d %H:%M:%S")
+        # platform = platform_name
+        # transaction_id = transaction_id
+        debit_title = "SPOT"
+        debit_amount = Decimal(transaction.get("value"))/gwei
+        debit_from = bsc_receipt['to']
+        debit_to = bsc_receipt['from']
+        credit_title = "SPOT"
+        credit_amount = Decimal(transaction.get("value"))/gwei
+        credit_from = bsc_receipt['from']
+        credit_to = bsc_receipt['to']
+        comment = "No comment"
+        writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+                              debit_from, debit_to, credit_title, credit_amount,
+                              credit_from, credit_to, comment])
+
+        # fee
+        debit_title = "FEE"
+        debit_amount = {"BNB": float(debit_amount_fee)}
+        debit_from = "0x0000000000000000000000000000000000000000"
+        debit_to = bsc_receipt['from']
+        credit_title = "SPOT"
+        credit_amount = {"BNB": float(debit_amount_fee)}
+        credit_from = bsc_receipt['from']
+        credit_to = "0x0000000000000000000000000000000000000000"
+        comment = "No comment"
+        writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+                              debit_from, debit_to, credit_title, credit_amount,
+                              credit_from, credit_to, comment])
 
 
 # make caaj file
-    f_caaj = open("dist/caaj_pancake.csv", "a", encoding='UTF-8')
-    writer_caaj = csv.writer(f_caaj)
-    # if logs[0]["topics"][0].hex().lower() == ERC20_APPROVE_TOPIC:
-    debit_amount_fee = Decimal(
-        bsc_receipt['gasUsed'])*Decimal(transaction['gasPrice'])/gwei
-    print(debit_amount_fee)
-    devit__title = "FEE"
-    debit_amount = debit_amount_fee
-    debit_from = "0x0000000000000000000000000000000000000000"
-    debit_to = address
-    credit_title = "SPOT"
-    credit_amount = debit_amount_fee
-    credit_from = address
-    credit_to = "0x0000000000000000000000000000000000000000"
-    writer_caaj.writerow([time, platform, transaction_id, devit__title, debit_amount,
-                          debit_from, debit_to, credit_title, credit_amount,
-                          credit_from, credit_to])
 
-    # print(input_transfers)
-    # for i in len(logs):
-    #     print(logs[i]["topics"])
-    print("\n")
+    # if logs[0]["topics"][0].hex().lower() == ERC20_APPROVE_TOPIC:
+    # debit_amount_fee = Decimal(
+    #     bsc_receipt['gasUsed'])*Decimal(transaction['gasPrice'])/gwei
+    # debit_title = "FEE"
+    # debit_amount = debit_amount_fee
+    # debit_from = "0x0000000000000000000000000000000000000000"
+    # debit_to = address
+    # credit_title = "SPOT"
+    # credit_amount = debit_amount_fee
+    # credit_from = address
+    # credit_to = "0x0000000000000000000000000000000000000000"
+    # writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+    #                       debit_from, debit_to, credit_title, credit_amount,
+    #                       credit_from, credit_to])
