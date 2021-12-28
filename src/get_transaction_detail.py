@@ -1,9 +1,9 @@
 """Get the details of the transaction obtained by get_transaction_list.py"""
+import os
 import csv
 from decimal import Decimal
 from datetime import datetime
 from web3 import Web3
-import os
 
 # transaction history
 # transafer(waki -> nishi) 0x57932a25175a1184d433be880655d1ee6d1a9e62853723e695f1d38553914462
@@ -28,7 +28,7 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
     Args:
         transaction: transaction
         transaction_number: index of the transaction lists
-        address: address of the transaction
+        address: account address of the transaction
         platform_name: name of the platform(ex. PancakeSwap)
     '''
     transaction_id = transaction.get("hash")
@@ -62,11 +62,11 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
         # platform = platform_name
         # transaction_id = transaction_id
         debit_title = "SPOT"
-        debit_amount = Decimal(transaction.get("value"))/gwei
+        debit_amount = str(Decimal(transaction.get("value"))/gwei)
         debit_from = bsc_receipt['to']
         debit_to = bsc_receipt['from']
         credit_title = "SPOT"
-        credit_amount = Decimal(transaction.get("value"))/gwei
+        credit_amount = str(Decimal(transaction.get("value"))/gwei)
         credit_from = bsc_receipt['from']
         credit_to = bsc_receipt['to']
         comment = "transfer"
@@ -76,11 +76,11 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
 
         # fee
         debit_title = "FEE"
-        debit_amount = {"BNB": float(debit_amount_fee)}
+        debit_amount = {"BNB": str(debit_amount_fee)}
         debit_from = "0x0000000000000000000000000000000000000000"
         debit_to = bsc_receipt['from']
         credit_title = "SPOT"
-        credit_amount = {"BNB": float(debit_amount_fee)}
+        credit_amount = {"BNB": str(debit_amount_fee)}
         credit_from = bsc_receipt['from']
         credit_to = "0x0000000000000000000000000000000000000000"
         comment = "transfer Fee"
@@ -91,11 +91,11 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
     elif len(logs) == 1 and logs[0]['topics'][0].hex().lower() == ERC20_APPROVE_TOPIC:
         # Approve fee
         debit_title = "FEE"
-        debit_amount = {"BNB": float(debit_amount_fee)}
+        debit_amount = {"BNB": str(debit_amount_fee)}
         debit_from = "0x0000000000000000000000000000000000000000"
         debit_to = bsc_receipt['from']
         credit_title = "SPOT"
-        credit_amount = {"BNB": float(debit_amount_fee)}
+        credit_amount = {"BNB": str(debit_amount_fee)}
         credit_from = bsc_receipt['from']
         credit_to = "0x0000000000000000000000000000000000000000"
         comment = "Cake max Approve"
