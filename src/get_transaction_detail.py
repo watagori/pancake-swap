@@ -3,7 +3,7 @@ import csv
 from decimal import Decimal
 from datetime import datetime
 from web3 import Web3
-
+import os
 
 # transaction history
 # transafer(waki -> nishi) 0x57932a25175a1184d433be880655d1ee6d1a9e62853723e695f1d38553914462
@@ -47,14 +47,16 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
         bsc_receipt['gasUsed'])*Decimal(transaction['gasPrice'])/gwei
     # credit_amount = Decimal(transaction.get("value"))/gwei
 
-    f_caaj = open("dist/caaj_pancake.csv", "w", encoding='UTF-8')
+# caaj csv file
+    file_dir = "dist/caaj_lancake.csv"
+    if os.path.exists(file_dir) and transaction_number == 0:
+        os.remove(file_dir)
+
+    f_caaj = open(file_dir, "a", encoding='UTF-8')
     writer_caaj = csv.writer(f_caaj)
 
-
-# transfer(waki -> nishi)
-    try:
-        logs[0]
-    except IndexError:
+    if len(logs) == 0:
+        # transfer(waki -> nishi)
         # transfer info
         # time = date_object.strftime("%Y-%m-%d %H:%M:%S")
         # platform = platform_name
@@ -67,7 +69,7 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
         credit_amount = Decimal(transaction.get("value"))/gwei
         credit_from = bsc_receipt['from']
         credit_to = bsc_receipt['to']
-        comment = "No comment"
+        comment = "transfer"
         writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
                               debit_from, debit_to, credit_title, credit_amount,
                               credit_from, credit_to, comment])
@@ -81,12 +83,27 @@ def get_transaction_detail(transaction, transaction_number, address, platform_na
         credit_amount = {"BNB": float(debit_amount_fee)}
         credit_from = bsc_receipt['from']
         credit_to = "0x0000000000000000000000000000000000000000"
-        comment = "No comment"
+        comment = "transfer Fee"
         writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
                               debit_from, debit_to, credit_title, credit_amount,
                               credit_from, credit_to, comment])
 
+    elif len(logs) == 1 and logs[0]['topics'][0].hex().lower() == ERC20_APPROVE_TOPIC:
+        # Approve fee
+        debit_title = "FEE"
+        debit_amount = {"BNB": float(debit_amount_fee)}
+        debit_from = "0x0000000000000000000000000000000000000000"
+        debit_to = bsc_receipt['from']
+        credit_title = "SPOT"
+        credit_amount = {"BNB": float(debit_amount_fee)}
+        credit_from = bsc_receipt['from']
+        credit_to = "0x0000000000000000000000000000000000000000"
+        comment = "Cake max Approve"
+        writer_caaj.writerow([time, platform, transaction_id, debit_title, debit_amount,
+                              debit_from, debit_to, credit_title, credit_amount,
+                              credit_from, credit_to, comment])
 
+    f_caaj.close()
 # make caaj file
 
     # if logs[0]["topics"][0].hex().lower() == ERC20_APPROVE_TOPIC:
