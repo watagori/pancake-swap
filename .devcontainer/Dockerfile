@@ -17,7 +17,7 @@ RUN pip install etherscan-python
 RUN pip install git+https://github.com/ca3-caaip/caaj_evm.git
 RUN pip install stellar-sdk
 RUN pip install symbol-sdk-core-python
-
+RUN pip install -U pytest
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 # COPY requirements.txt /tmp/pip-tmp/
