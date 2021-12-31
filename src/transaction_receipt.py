@@ -43,6 +43,10 @@ class Logs:
             # add liquidity
             return "add-liquidity"
 
-    def get_to(self):
+    def get_transfer_from(self, receipt):
+        credit_from = receipt["from"].lower()
+        return credit_from
 
-        return "0x0000000000000000000000000000000000000000"
+    def get_transfer_to(self, receipt):
+        credit_to = receipt["to"].lower()
+        return credit_to
