@@ -22,21 +22,26 @@ class Logs:
             return "transfer"
 
         if len(logs) == 1 and logs[0]["topics"][0] == ERC20_APPROVE_TOPIC:
+            # approve fee
             return "approve"
 
         if logs[0]['topics'][0] == WETH_DEPOSIT_TOPIC:
-            return "exchange"
+            # exchange(BNB -> other)
+            return "exchange-bnb"
 
         if logs[0]['topics'][0] == ERC20_APPROVE_TOPIC and len(logs) != 1:
-            return "liquidity"
+            # remove liquidity
+            return "remove-liquidity"
 
         if logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
                 logs[2]['topics'][0] == ERC20_TRANSFER_TOPIC:
+            # exchange(non-BNB -> non-BNB)
             return "exchange"
 
         if logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
                 logs[2]['topics'][0] == WETH_DEPOSIT_TOPIC:
-            return "liquidity"
+            # add liquidity
+            return "add-liquidity"
 
         else:
             return "unknown"

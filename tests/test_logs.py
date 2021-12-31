@@ -9,11 +9,11 @@ def test_approve_01():
     assert Logs().get_transaction_type(jsondata) == "approve"
 
 
-def test_exchange_bnb_to_cake_01():
+def test_deposit_01():
     file = open("data/exchange_bnb_to_cake.json", "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_transaction_type(jsondata) == "exchange"
+    assert Logs().get_transaction_type(jsondata) == "exchange-bnb"
 
 
 def test_exchange_cake_to_bnb_01():
@@ -28,4 +28,12 @@ def test_liquidity_bnb_and_cake_to_lp_01():
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_transaction_type(jsondata) == "liquidity"
+    assert Logs().get_transaction_type(jsondata) == "add-liquidity"
+
+
+def test_liquidity_lp_to_bnb_and_cake_01():
+    file = open("data/liquidity_lp_to_bnb_and_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_transaction_type(jsondata) == "remove-liquidity"
