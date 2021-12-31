@@ -1,6 +1,6 @@
 # receipt by w3.eth.get_transaction_receipt(transaction_hash)
 import json
-from src.transaction_receipt import Logs
+from src.transaction_type import Logs
 
 
 def test_swap_type_01():
