@@ -1,3 +1,4 @@
+# logs by w3.eth.get_transaction_receipt(transaction_hash)
 import json
 from src.logs import Logs
 
