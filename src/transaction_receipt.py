@@ -17,28 +17,32 @@ class Logs:
     def __init__(self):
         pass
 
-    def get_transaction_type(self, logs):
-        if len(logs) == 0:
+    def get_transaction_type(self, receipt):
+        if len(receipt["logs"]) == 0:
             return "transfer"
 
-        if len(logs) == 1 and logs[0]["topics"][0] == ERC20_APPROVE_TOPIC:
+        if len(receipt["logs"]) == 1 and receipt["logs"][0]["topics"][0] == ERC20_APPROVE_TOPIC:
             # approve fee
             return "approve"
 
-        if logs[0]['topics'][0] == WETH_DEPOSIT_TOPIC:
+        if receipt["logs"][0]['topics'][0] == WETH_DEPOSIT_TOPIC:
             # exchange(BNB -> other)
             return "exchange-bnb"
 
-        if logs[0]['topics'][0] == ERC20_APPROVE_TOPIC and len(logs) != 1:
+        if receipt["logs"][0]['topics'][0] == ERC20_APPROVE_TOPIC and len(receipt["logs"]) != 1:
             # remove liquidity
             return "remove-liquidity"
 
-        if logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
-                logs[2]['topics'][0] == ERC20_TRANSFER_TOPIC:
+        if receipt["logs"][0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
+                receipt["logs"][2]['topics'][0] == ERC20_TRANSFER_TOPIC:
             # exchange(non-BNB -> non-BNB)
             return "exchange"
 
-        if logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
-                logs[2]['topics'][0] == WETH_DEPOSIT_TOPIC:
+        if receipt["logs"][0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
+                receipt["logs"][2]['topics'][0] == WETH_DEPOSIT_TOPIC:
             # add liquidity
             return "add-liquidity"
+
+    def get_to(self):
+
+        return "0x0000000000000000000000000000000000000000"

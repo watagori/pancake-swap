@@ -14,7 +14,7 @@ import json
 # liquidity(LP -> BNB + CAKE) 0xdc70901bcb2517a885e41ab9ccb0a739ae73af4b8862a1c46f9ca2ce583b8cd3
 # exchange(CAKE -> BNB) 0xd3f63cdad3bb1b8ea46fafbaac21c93cdb7204daece60f1a44aaa198f58371fa
 
-TRANSACTION_ID = "0x57932a25175a1184d433be880655d1ee6d1a9e62853723e695f1d38553914462"
+TRANSACTION_ID = "0xdc70901bcb2517a885e41ab9ccb0a739ae73af4b8862a1c46f9ca2ce583b8cd3"
 BSC_URL = "https://bsc-dataseed.binance.org/"
 w3 = Web3(Web3.HTTPProvider(BSC_URL))
 
@@ -23,8 +23,8 @@ def get_logs_by_address(transaction_id):
     '''Get transaction by address'''
     bsc_receipt = w3.eth.get_transaction_receipt(transaction_id)
 
-    jsondata = Web3.toJSON(bsc_receipt["logs"])
-    jsonfile = open("data/logs/transfer_waki_to_nishi.json",
+    jsondata = Web3.toJSON(bsc_receipt)
+    jsonfile = open("data/receipt/liquidity_lp_to_bnb_and_cake.json",
                     "w", encoding="utf-8")
     jsonfile.write(jsondata)
     jsonfile.close()
