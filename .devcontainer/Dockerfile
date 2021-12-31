@@ -18,7 +18,7 @@ RUN pip install git+https://github.com/ca3-caaip/caaj_evm.git
 RUN pip install stellar-sdk
 RUN pip install symbol-sdk-core-python
 RUN pip install -U pytest
-
+RUN pip install pytest-cov
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 # COPY requirements.txt /tmp/pip-tmp/
 # RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \

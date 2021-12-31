@@ -42,6 +42,3 @@ class Logs:
                 logs[2]['topics'][0] == WETH_DEPOSIT_TOPIC:
             # add liquidity
             return "add-liquidity"
-
-        else:
-            return "unknown"
