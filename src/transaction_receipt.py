@@ -17,6 +17,10 @@ class Logs:
     def __init__(self):
         pass
 
+    def get_swap_type(self, receipt):
+        if receipt["to"].lower() == PANCAKE_ROUTER_V2_ADDRESS:
+            return True
+
     def get_transaction_type(self, receipt):
         if len(receipt["logs"]) == 0:
             return "transfer"

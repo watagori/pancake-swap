@@ -3,6 +3,14 @@ import json
 from src.transaction_receipt import Logs
 
 
+def test_swap_type_01():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_swap_type(jsondata) is True
+
+
 def test_get_transaction_type_01():
 
     file = open("data/receipt/approve_cake_max.json",
