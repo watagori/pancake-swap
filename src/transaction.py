@@ -1,3 +1,5 @@
+# transaction data from BscScan documetn(Get a list of 'Normal' Transactions By Address)
+
 from datetime import datetime
 from decimal import Decimal
 
