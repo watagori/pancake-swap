@@ -52,19 +52,37 @@ def test_get_transaction_type_06():
     assert Logs().get_transaction_type(jsondata) == "transfer"
 
 
-def test_transfer_to():
+def test_to_01():
     file = open("data/receipt/transfer.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_transfer_to(
+    assert Logs().get_to(
         jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
 
-def test_transfer_from():
+def test_to_02():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_to(
+        jsondata) == "0x10ed43c718714eb63d5aa57b78b54704e256024e"
+
+
+def test_from_01():
     file = open("data/receipt/transfer.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_transfer_from(
+    assert Logs().get_from(
         jsondata) == "0x3c783c21a0383057d128bae431894a5c19f9cf06"
+
+
+def test_from_02():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_from(
+        jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
