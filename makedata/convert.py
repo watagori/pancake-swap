@@ -34,16 +34,17 @@ get_logs_by_address(TRANSACTION_ID)
 
 
 def get_transaction(transaction_number, address):
-    url = "https://api.bscscan.com/api?module=account&action=txlist&address=" + address \
-        + "&startblock=0&endblock=99999999&page=1&offset=" + str(transaction_number) \
-        + "&sort=desc&apikey=TBY4C25PY394RSWTF6DUXWCHJTYF8Q8H1U"
+    url = "https://api.bscscan.com/api?module=account&action=txlist&address=" + \
+        address + "&startblock=0&endblock=99999999&page=1&offset=" + str(transaction_number) \
+        + "&sort=asc&apikey=TBY4C25PY394RSWTF6DUXWCHJTYF8Q8H1U"
     response = requests.get(url, verify=certifi.where())
     address_content = response.json()
     details = address_content.get("result")
 
     for index, transaction in enumerate(details):
 
-        with open("data/transaction/transaction" + str(index) + ".json", "w", encoding="utf-8") as outfile:
+        with open("data/transaction/transaction" + str(index) + ".json", "w", encoding="utf-8") \
+                as outfile:
             json.dump(transaction, outfile)
 
 
