@@ -14,7 +14,7 @@ import json
 # liquidity(LP -> BNB + CAKE) 0xdc70901bcb2517a885e41ab9ccb0a739ae73af4b8862a1c46f9ca2ce583b8cd3
 # exchange(CAKE -> BNB) 0xd3f63cdad3bb1b8ea46fafbaac21c93cdb7204daece60f1a44aaa198f58371fa
 
-TRANSACTION_ID = "0x57932a25175a1184d433be880655d1ee6d1a9e62853723e695f1d38553914462"
+TRANSACTION_ID = "0x97c602cd31efa5bb309e427c819c0c51e324fd226e5133689912e0821b8fe166"
 BSC_URL = "https://bsc-dataseed.binance.org/"
 w3 = Web3(Web3.HTTPProvider(BSC_URL))
 
@@ -24,7 +24,7 @@ def get_logs_by_address(transaction_id):
     bsc_receipt = w3.eth.get_transaction_receipt(transaction_id)
 
     jsondata = Web3.toJSON(bsc_receipt)
-    jsonfile = open("data/receipt/transfer.json",
+    jsonfile = open("data/receipt/farm.json",
                     "w", encoding="utf-8")
     jsonfile.write(jsondata)
     jsonfile.close()
@@ -33,20 +33,20 @@ def get_logs_by_address(transaction_id):
 get_logs_by_address(TRANSACTION_ID)
 
 
-def get_transaction(transaction_number, address):
-    url = "https://api.bscscan.com/api?module=account&action=txlist&address=" + \
-        address + "&startblock=0&endblock=99999999&page=1&offset=" + str(transaction_number) \
-        + "&sort=asc&apikey=TBY4C25PY394RSWTF6DUXWCHJTYF8Q8H1U"
-    response = requests.get(url, verify=certifi.where())
-    address_content = response.json()
-    details = address_content.get("result")
+# def get_transaction(transaction_number, address):
+#     url = "https://api.bscscan.com/api?module=account&action=txlist&address=" + \
+#         address + "&startblock=0&endblock=99999999&page=1&offset=" + str(transaction_number) \
+#         + "&sort=asc&apikey=TBY4C25PY394RSWTF6DUXWCHJTYF8Q8H1U"
+#     response = requests.get(url, verify=certifi.where())
+#     address_content = response.json()
+#     details = address_content.get("result")
 
-    for index, transaction in enumerate(details):
+#     for index, transaction in enumerate(details):
 
-        with open("data/transaction/transaction" + str(index) + ".json", "w", encoding="utf-8") \
-                as outfile:
-            json.dump(transaction, outfile)
+#         with open("data/transaction/transaction" + str(index) + ".json", "w", encoding="utf-8") \
+#                 as outfile:
+#             json.dump(transaction, outfile)
 
 
-get_transaction(
-    5, "0xDa28ecfc40181a6DAD8b52723035DFba3386d26E")
+# get_transaction(
+#     5, "0xDa28ecfc40181a6DAD8b52723035DFba3386d26E")

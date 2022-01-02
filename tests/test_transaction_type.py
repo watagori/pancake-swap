@@ -11,6 +11,23 @@ def test_swap_type_01():
     assert Logs().get_swap_type(jsondata) == "bnb_pancakeswap"
 
 
+def test_swap_type_02():
+    file = open("data/receipt/deposit.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_swap_type(jsondata) == "unknown"
+
+
+def test_get_transaction_type_00():
+
+    file = open("data/receipt/transfer.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_transaction_type(jsondata) == "transfer"
+
+
 def test_get_transaction_type_01():
 
     file = open("data/receipt/approve_cake_max.json",

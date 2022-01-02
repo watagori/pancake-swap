@@ -32,6 +32,8 @@ class Logs:
         if receipt["to"].lower() == PANCAKE_ROUTER_V2_ADDRESS:
             return "bnb_pancakeswap"
 
+        return "unknown"
+
     def get_transaction_type(self, receipt):
         if len(receipt["logs"]) == 0:
             return "transfer"
@@ -54,6 +56,8 @@ class Logs:
                 receipt["logs"][2]['topics'][0] == WETH_DEPOSIT_TOPIC:
             # add liquidity
             return "add-liquidity"
+
+        return "unknown"
 
     def get_transaction_from(self, receipt):
         credit_from = receipt["from"].lower()
