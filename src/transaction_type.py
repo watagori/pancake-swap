@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+
 WETH_CONTRACT_ADDRESS = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
 WETH_DEPOSIT_TOPIC = '0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c'
 WETH_WITHDRAWAL_TOPIC = '0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65'
@@ -10,6 +13,8 @@ WBNB_CONTRACT_ADDRESS = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
 
 PANCAKE_ROUTER_V2_ADDRESS = "0x10ed43c718714eb63d5aa57b78b54704e256024e"
 PANCAKE_LP_ADDRESS = "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
+
+WEI = 1000000000000000000
 
 
 class Logs:
@@ -59,3 +64,13 @@ class Logs:
     def get_exchange_contract_address_to(self, receipt):
         token_address_to = receipt["logs"][2]["address"].lower()
         return token_address_to
+
+    def get_exchange_credit_amount_from(self, receipt):
+        credit_amount_from = Decimal(
+            int(receipt["logs"][0]["data"].lower(), 16))/Decimal(WEI)
+        return str(credit_amount_from)
+
+    def get_exchange_credit_amount_to(self, receipt):
+        credit_amount_to = Decimal(
+            int(receipt["logs"][2]["data"].lower(), 16))/Decimal(WEI)
+        return str(credit_amount_to)

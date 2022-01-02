@@ -94,3 +94,21 @@ def test_exchange_contract_address_to_01():
     file.close()
     assert Logs().get_exchange_contract_address_to(
         jsondata) == "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+
+
+def test_exchange_credit_amount_from_01():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_exchange_credit_amount_from(
+        jsondata) == "0.5"
+
+
+def test_exchange_credit_amount_to_01():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_exchange_credit_amount_to(
+        jsondata) == "21.562948714728883817"
