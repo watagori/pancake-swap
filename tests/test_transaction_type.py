@@ -114,33 +114,24 @@ def test_exchange_credit_amount_to_01():
         jsondata) == "21.562948714728883817"
 
 
-def test_liquidity_add_contract_addressto_01():
+def test_liquidity_add_contract_address_debit_01():
     file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_liquidity_add_contract_address_to(
+    assert Logs().get_liquidity_add_contract_address_debit(
         jsondata) == "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
 
 
-def test_liquidity_add_contract_address_from_01():
+def test_liquidity_add_contract_address_credit_01():
     file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
     assert "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" and \
         "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c" \
-        in Logs().get_liquidity_add_contract_address_from(
+        in Logs().get_liquidity_add_contract_address_credit(
            jsondata)
-
-
-def test_liquidity_add_amount_credit_01():
-    file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
-                "r", encoding="utf-8")
-    jsondata = json.load(file)
-    file.close()
-    assert Logs().get_liquidity_add_amount_credit(
-        jsondata) == "3.164332228458444898"
 
 
 def test_liquidity_add_amount_debit_01():
@@ -148,5 +139,59 @@ def test_liquidity_add_amount_debit_01():
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
+    assert Logs().get_liquidity_add_amount_debit(
+        jsondata) == "3.164332228458444898"
+
+
+def test_liquidity_add_amount_credit_01():
+    file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
     assert "21.562948714728883817" and "0.497952988038470308" \
-        in Logs().get_liquidity_add_amount_debit(jsondata)
+        in Logs().get_liquidity_add_amount_credit(jsondata)
+
+
+def test_liquidity_remove_contract_address_debit():
+    file = open("data/receipt/liquidity_lp_to_bnb_and_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" and \
+        "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c" \
+        in Logs().get_liquidity_remove_contract_address_debit(
+            jsondata)
+
+
+def test_liquidity_remove_contract_address_credit():
+    file = open("data/receipt/liquidity_lp_to_bnb_and_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_liquidity_remove_contract_address_credit(jsondata) == \
+        "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
+
+
+def test_liquidity_remove_amount_debit_01():
+    file = open("data/receipt/liquidity_lp_to_bnb_and_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert "21.5721707333114908" and "0.497740943162833803" \
+        in Logs().get_liquidity_remove_amount_debit(jsondata)
+
+
+def test_liquidity_remove_amoubnt_credit_01():
+    file = open("data/receipt/liquidity_lp_to_bnb_and_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_liquidity_remove_amount_credit(
+        jsondata) == "3.164332228458444898"
+
+# def test_fee_from_01():
+#     file = open("data/receipt/fee_bnb_to_lp.json",
+#                 "r", encoding="utf-8")
+#     jsondata = json.load(file)
+#     file.close()
+#     assert Logs().get_fee_from(jsondata) == "0x0ed7e52944161450477ee417de9cd3a859b14fd0"

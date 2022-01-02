@@ -40,7 +40,7 @@ class Logs:
 
         if receipt["logs"][0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
                 receipt["logs"][2]['topics'][0] == ERC20_TRANSFER_TOPIC or \
-            receipt["logs"][0]['topics'][0] == WETH_DEPOSIT_TOPIC:
+        receipt["logs"][0]['topics'][0] == WETH_DEPOSIT_TOPIC:
             # exchange
             return "exchange"
 
@@ -75,23 +75,44 @@ class Logs:
             int(receipt["logs"][2]["data"].lower(), 16))/Decimal(WEI)
         return str(credit_amount_to)
 
-    def get_liquidity_add_contract_address_to(self, receipt):
-        token_address = receipt["logs"][4]["address"].lower()
+    def get_liquidity_add_contract_address_debit(self, receipt):
+        token_address = receipt["logs"][5]["address"].lower()
         return token_address
 
-    def get_liquidity_add_contract_address_from(self, receipt):
+    def get_liquidity_add_contract_address_credit(self, receipt):
         token_address_one = receipt["logs"][0]["address"].lower()
         token_address_two = receipt["logs"][2]["address"].lower()
         return {token_address_one, token_address_two}
 
-    def get_liquidity_add_amount_credit(self, receipt):
+    def get_liquidity_add_amount_debit(self, receipt):
         credit_amount = Decimal(
             int(receipt["logs"][5]["data"].lower(), 16))/Decimal(WEI)
         return str(credit_amount)
 
-    def get_liquidity_add_amount_debit(self, receipt):
+    def get_liquidity_add_amount_credit(self, receipt):
         debit_amount_one = Decimal(
             int(receipt["logs"][0]["data"].lower(), 16))/Decimal(WEI)
         debit_amount_two = Decimal(
             int(receipt["logs"][2]["data"].lower(), 16))/Decimal(WEI)
         return {str(debit_amount_one), str(debit_amount_two)}
+
+    def get_liquidity_remove_contract_address_debit(self, receipt):
+        token_address_one = receipt["logs"][8]["address"].lower()
+        token_address_two = receipt["logs"][9]["address"].lower()
+        return {token_address_one, token_address_two}
+
+    def get_liquidity_remove_contract_address_credit(self, receipt):
+        token_address = receipt["logs"][0]["address"].lower()
+        return token_address
+
+    def get_liquidity_remove_amount_debit(self, receipt):
+        debit_amount_one = Decimal(
+            int(receipt["logs"][8]["data"].lower(), 16))/Decimal(WEI)
+        debit_amount_two = Decimal(
+            int(receipt["logs"][9]["data"].lower(), 16))/Decimal(WEI)
+        return {str(debit_amount_one), str(debit_amount_two)}
+
+    def get_liquidity_remove_amount_credit(self, receipt):
+        credit_amount = Decimal(
+            int(receipt["logs"][0]["data"].lower(), 16))/Decimal(WEI)
+        return str(credit_amount)
