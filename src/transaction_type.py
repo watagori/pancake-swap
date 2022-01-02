@@ -30,7 +30,7 @@ class Logs:
 
     def get_swap_type(self, receipt):
         if receipt["to"].lower() == PANCAKE_ROUTER_V2_ADDRESS:
-            return True
+            return "bnb_pancakeswap"
 
     def get_transaction_type(self, receipt):
         if len(receipt["logs"]) == 0:
@@ -134,7 +134,7 @@ class Logs:
     def get_transaction_exchange_detail(self, receipt, transaction_overview):
         caaj_data = {
             "time": Transaction().get_time(transaction_overview),
-            "platform": "bnb_pancakeswap",
+            "platform": self.get_swap_type(receipt),
             "transaction_hash": Transaction().get_hash(transaction_overview),
             "debit_title": "SPOT",
             "debit_amount": {CONTRACT_TYPE[self.get_exchange_contract_address_to(receipt)]:

@@ -8,7 +8,7 @@ def test_swap_type_01():
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_swap_type(jsondata) is True
+    assert Logs().get_swap_type(jsondata) == "bnb_pancakeswap"
 
 
 def test_get_transaction_type_01():
