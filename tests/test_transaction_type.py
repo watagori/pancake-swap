@@ -69,13 +69,13 @@ def test_transaction_to_01():
         jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
 
-def test_transaction_to_02():
+def test_transaction_from_01():
     file = open("data/receipt/exchange_bnb_to_cake.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_transaction_to(
-        jsondata) == "0x10ed43c718714eb63d5aa57b78b54704e256024e"
+    assert Logs().get_transaction_from(
+        jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
 
 def test_exchange_contract_address_from_01():
@@ -112,3 +112,41 @@ def test_exchange_credit_amount_to_01():
     file.close()
     assert Logs().get_exchange_credit_amount_to(
         jsondata) == "21.562948714728883817"
+
+
+def test_liquidity_add_contract_addressto_01():
+    file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_liquidity_add_contract_address_to(
+        jsondata) == "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
+
+
+def test_liquidity_add_contract_address_from_01():
+    file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" and \
+        "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c" \
+        in Logs().get_liquidity_add_contract_address_from(
+           jsondata)
+
+
+def test_liquidity_add_amount_credit_01():
+    file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_liquidity_add_amount_credit(
+        jsondata) == "3.164332228458444898"
+
+
+def test_liquidity_add_amount_debit_01():
+    file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert "21.562948714728883817" and "0.497952988038470308" \
+        in Logs().get_liquidity_add_amount_debit(jsondata)
