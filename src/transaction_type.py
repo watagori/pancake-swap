@@ -1,5 +1,5 @@
 from decimal import Decimal
-
+from src.transaction import Transaction
 
 WETH_CONTRACT_ADDRESS = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
 WETH_DEPOSIT_TOPIC = '0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c'
@@ -15,6 +15,12 @@ PANCAKE_ROUTER_V2_ADDRESS = "0x10ed43c718714eb63d5aa57b78b54704e256024e"
 PANCAKE_LP_ADDRESS = "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
 
 WEI = 1000000000000000000
+
+
+CONTRACT_TYPE = {
+    WBNB_CONTRACT_ADDRESS: 'BNB',
+    CAKE_CONTRACT_ADDRESS: 'CAKE',
+}
 
 
 class Logs:
@@ -40,7 +46,7 @@ class Logs:
 
         if receipt["logs"][0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
                 receipt["logs"][2]['topics'][0] == ERC20_TRANSFER_TOPIC or \
-        receipt["logs"][0]['topics'][0] == WETH_DEPOSIT_TOPIC:
+            receipt["logs"][0]['topics'][0] == WETH_DEPOSIT_TOPIC:
             # exchange
             return "exchange"
 
@@ -121,6 +127,25 @@ class Logs:
         fee_from = receipt["from"].lower()
         return fee_from
 
-    def get_transaction_fee_to(self, receipt):
+    def get_transaction_fee_to(self):
         fee_to = "0x0000000000000000000000000000000000000000"
         return fee_to
+
+    def get_transaction_exchange_detail(self, receipt, transaction_overview):
+        caaj_data = {
+            "time": Transaction().get_time(transaction_overview),
+            "platform": "bnb_pancakeswap",
+            "transaction_hash": Transaction().get_hash(transaction_overview),
+            "debit_title": "SPOT",
+            "debit_amount": {CONTRACT_TYPE[self.get_exchange_contract_address_to(receipt)]:
+                             self.get_exchange_credit_amount_to(receipt)},
+            "debit_from": self.get_transaction_to(receipt),
+            "debit_to": self.get_transaction_from(receipt),
+            "credit_title": "SPOT",
+            "credit_amount": {CONTRACT_TYPE[self.get_exchange_contract_address_from(receipt)]:
+                              self.get_exchange_credit_amount_from(receipt)},
+            "credit_from": self.get_transaction_from(receipt),
+            "credit_to": self.get_transaction_to(receipt),
+        }
+
+        return caaj_data
