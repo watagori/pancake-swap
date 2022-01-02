@@ -189,9 +189,29 @@ def test_liquidity_remove_amoubnt_credit_01():
     assert Logs().get_liquidity_remove_amount_credit(
         jsondata) == "3.164332228458444898"
 
-# def test_fee_from_01():
-#     file = open("data/receipt/fee_bnb_to_lp.json",
-#                 "r", encoding="utf-8")
-#     jsondata = json.load(file)
-#     file.close()
-#     assert Logs().get_fee_from(jsondata) == "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
+
+def test_transaction_fee_from_01():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_transaction_fee_from(
+        jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
+
+
+def test_transaction_fee_from_02():
+    file = open("data/receipt/liquidity_bnb_and_cake_to_lp.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_transaction_fee_from(
+        jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
+
+
+def test_transaction_fee_to_01():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_transaction_fee_to(
+        jsondata) == "0x0000000000000000000000000000000000000000"

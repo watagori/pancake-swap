@@ -116,3 +116,11 @@ class Logs:
         credit_amount = Decimal(
             int(receipt["logs"][0]["data"].lower(), 16))/Decimal(WEI)
         return str(credit_amount)
+
+    def get_transaction_fee_from(self, receipt):
+        fee_from = receipt["from"].lower()
+        return fee_from
+
+    def get_transaction_fee_to(self, receipt):
+        fee_to = "0x0000000000000000000000000000000000000000"
+        return fee_to
