@@ -29,17 +29,14 @@ class Logs:
             # approve fee
             return "approve"
 
-        if receipt["logs"][0]['topics'][0] == WETH_DEPOSIT_TOPIC:
-            # exchange(BNB -> other)
-            return "exchange-bnb"
-
         if receipt["logs"][0]['topics'][0] == ERC20_APPROVE_TOPIC and len(receipt["logs"]) != 1:
             # remove liquidity
             return "remove-liquidity"
 
         if receipt["logs"][0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
-                receipt["logs"][2]['topics'][0] == ERC20_TRANSFER_TOPIC:
-            # exchange(non-BNB -> non-BNB)
+                receipt["logs"][2]['topics'][0] == ERC20_TRANSFER_TOPIC or \
+        receipt["logs"][0]['topics'][0] == WETH_DEPOSIT_TOPIC:
+            # exchange
             return "exchange"
 
         if receipt["logs"][0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
@@ -47,10 +44,18 @@ class Logs:
             # add liquidity
             return "add-liquidity"
 
-    def get_from(self, receipt):
+    def get_transaction_from(self, receipt):
         credit_from = receipt["from"].lower()
         return credit_from
 
-    def get_to(self, receipt):
+    def get_transaction_to(self, receipt):
         credit_to = receipt["to"].lower()
         return credit_to
+
+    def get_exchange_contract_address_from(self, receipt):
+        token_address_from = receipt["logs"][0]["address"].lower()
+        return token_address_from
+
+    def get_exchange_contract_address_to(self, receipt):
+        token_address_to = receipt["logs"][2]["address"].lower()
+        return token_address_to

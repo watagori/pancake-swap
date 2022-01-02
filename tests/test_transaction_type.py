@@ -25,7 +25,7 @@ def test_get_transaction_type_02():
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_transaction_type(jsondata) == "exchange-bnb"
+    assert Logs().get_transaction_type(jsondata) == "exchange"
 
 
 def test_get_transaction_type_03():
@@ -60,37 +60,37 @@ def test_get_transaction_type_06():
     assert Logs().get_transaction_type(jsondata) == "transfer"
 
 
-def test_to_01():
+def test_transaction_to_01():
     file = open("data/receipt/transfer.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_to(
+    assert Logs().get_transaction_to(
         jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
 
-def test_to_02():
+def test_transaction_to_02():
     file = open("data/receipt/exchange_bnb_to_cake.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_to(
+    assert Logs().get_transaction_to(
         jsondata) == "0x10ed43c718714eb63d5aa57b78b54704e256024e"
 
 
-def test_from_01():
-    file = open("data/receipt/transfer.json",
-                "r", encoding="utf-8")
-    jsondata = json.load(file)
-    file.close()
-    assert Logs().get_from(
-        jsondata) == "0x3c783c21a0383057d128bae431894a5c19f9cf06"
-
-
-def test_from_02():
+def test_exchange_contract_address_from_01():
     file = open("data/receipt/exchange_bnb_to_cake.json",
                 "r", encoding="utf-8")
     jsondata = json.load(file)
     file.close()
-    assert Logs().get_from(
-        jsondata) == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
+    assert Logs().get_exchange_contract_address_from(
+        jsondata) == "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+
+
+def test_exchange_contract_address_to_01():
+    file = open("data/receipt/exchange_bnb_to_cake.json",
+                "r", encoding="utf-8")
+    jsondata = json.load(file)
+    file.close()
+    assert Logs().get_exchange_contract_address_to(
+        jsondata) == "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
