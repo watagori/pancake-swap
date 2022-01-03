@@ -1,3 +1,3 @@
 ## pytest
 
-- pytest -v --cov=src
+- pytest --cov=src --cov-branch --cov-report=term-missing
