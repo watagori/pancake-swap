@@ -8,17 +8,38 @@ class TestHeader:
     def test_get_time_01(self):
         file = open("data/transaction/transaction1.json",
                     "r", encoding="utf-8")
-        jsondata = json.load(file)
+        header = json.load(file)
         file.close()
         time = Header(
-            jsondata["timeStamp"], jsondata["gasPrice"], jsondata["gasUsed"]).get_time()
+            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"]).get_time()
         assert time == "2021-12-28-01:28:52"
 
-    def test_get_transaction_fee_01(self):
+    def test_get_fee_amount_01(self):
         file = open("data/transaction/transaction1.json",
                     "r", encoding="utf-8")
-        jsondata = json.load(file)
+        header = json.load(file)
         file.close()
         transaction_fee = Header(
-            jsondata["timeStamp"], jsondata["gasPrice"], jsondata["gasUsed"]).get_transaction_fee()
+            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"])\
+            .get_transaction_fee()
         assert transaction_fee == "0.00067182"
+
+    def test_get_fee_from_01(self):
+        file = open("data/transaction/transaction1.json",
+                    "r", encoding="utf-8")
+        header = json.load(file)
+        file.close()
+        fee_from = Header(
+            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"])\
+            .get_fee_from()
+        assert fee_from == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
+
+    def test_get_fee_to_01(self):
+        file = open("data/transaction/transaction1.json",
+                    "r", encoding="utf-8")
+        header = json.load(file)
+        file.close()
+        fee_to = Header(
+            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"])\
+            .get_fee_to()
+        assert fee_to == "0x0000000000000000000000000000000000000000"
