@@ -5,7 +5,7 @@ from decimal import Decimal
 WEI = 1000000000000000000
 
 
-class Header:
+class Header(object):
     def __init__(self, timestamp, gas_price, gas_used, fee_from):
         self.timestamp = timestamp
         self.gas_price = gas_price

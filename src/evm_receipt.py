@@ -18,7 +18,7 @@ PANCAKE_LP_ADDRESS = "0x0ed7e52944161450477ee417de9cd3a859b14fd0"
 WEI = 1000000000000000000
 
 
-class EvmReceipt:
+class EvmReceipt(object):
     def __init__(self, logs, from_address, to_address):
         self.logs = logs
         self.from_address = from_address
