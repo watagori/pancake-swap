@@ -5,7 +5,7 @@ from src.evm_receipt import EvmReceipt
 
 class TestEvmReceipt:
     def test_get_type_01(self):
-        file = open("data/receipt/approve_cake_max.json",
+        file = open("data/receipt/approve.json",
                     "r", encoding="utf-8")
         receipt = json.load(file)
         file.close()
@@ -65,7 +65,7 @@ class TestEvmReceipt:
         assert transaction_type == "remove-liquidity"
 
     def test_get_from_address_01(self):
-        file = open("data/receipt/approve_cake_max.json",
+        file = open("data/receipt/approve.json",
                     "r", encoding="utf-8")
         receipt = json.load(file)
         file.close()
@@ -75,7 +75,7 @@ class TestEvmReceipt:
         assert from_address == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
     def test_get_to_address_01(self):
-        file = open("data/receipt/approve_cake_max.json",
+        file = open("data/receipt/approve.json",
                     "r", encoding="utf-8")
         receipt = json.load(file)
         file.close()

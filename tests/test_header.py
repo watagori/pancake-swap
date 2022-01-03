@@ -6,7 +6,7 @@ from src.header import Header
 class TestHeader:
 
     def test_get_time_01(self):
-        file = open("data/transaction/transaction1.json",
+        file = open("data/header/exchange_bnb_to_cake.json",
                     "r", encoding="utf-8")
         header = json.load(file)
         file.close()
@@ -15,7 +15,7 @@ class TestHeader:
         assert time == "2021-12-28-01:28:52"
 
     def test_get_fee_amount_01(self):
-        file = open("data/transaction/transaction1.json",
+        file = open("data/header/exchange_bnb_to_cake.json",
                     "r", encoding="utf-8")
         header = json.load(file)
         file.close()
@@ -25,7 +25,7 @@ class TestHeader:
         assert transaction_fee == "0.00067182"
 
     def test_get_fee_from_01(self):
-        file = open("data/transaction/transaction1.json",
+        file = open("data/header/exchange_bnb_to_cake.json",
                     "r", encoding="utf-8")
         header = json.load(file)
         file.close()
@@ -35,7 +35,7 @@ class TestHeader:
         assert fee_from == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
     def test_get_fee_to_01(self):
-        file = open("data/transaction/transaction1.json",
+        file = open("data/header/exchange_bnb_to_cake.json",
                     "r", encoding="utf-8")
         header = json.load(file)
         file.close()
