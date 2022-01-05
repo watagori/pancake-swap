@@ -1,4 +1,9 @@
 {
-  "python.linting.pylintArgs": ["--disable=C0111"],
-  "editor.tabSize": 2
+  //   "editor.tabSize": 2,
+  //   "python.linting.pylintArgs": ["--indent-string='  '"]
+  //   "python.formatting.autopep8Args": [
+  //     // autopep8 の設定
+  //     "--indent-size=2"
+  //   ]
+  "python.linting.pylintArgs": ["--disable=C0111"]
 }
