@@ -21,8 +21,6 @@ class TestEvmReceipt:
         file.close()
         result = EvmReceipt(receipt).get_result()
         result_target = {
-            "platform": "bnb_pancakeswap",
-            "transaction_type": "approve",
             "from_address": "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
             "to_address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
         }
@@ -36,8 +34,6 @@ class TestEvmReceipt:
         file.close()
         result = EvmReceipt(receipt).get_result()
         result_target = {
-            "platform": "bnb_pancakeswap",
-            "transaction_type": "exchange",
             "from_address": "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
             "to_address": "0x10ed43c718714eb63d5aa57b78b54704e256024e",
             "from_token_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
@@ -55,8 +51,6 @@ class TestEvmReceipt:
         file.close()
         result = EvmReceipt(receipt).get_result()
         result_target = {
-            "platform": "bnb_pancakeswap",
-            "transaction_type": "exchange",
             "from_address": "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
             "to_address": "0x10ed43c718714eb63d5aa57b78b54704e256024e",
             "to_token_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
@@ -74,8 +68,6 @@ class TestEvmReceipt:
         file.close()
         result = EvmReceipt(receipt).get_result()
         result_target = {
-            "platform": "bnb_pancakeswap",
-            "transaction_type": "add-liquidity",
             "from_address": "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
             "to_address": "0x10ed43c718714eb63d5aa57b78b54704e256024e",
             "from_token_address": {"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
@@ -94,8 +86,6 @@ class TestEvmReceipt:
         file.close()
         result = EvmReceipt(receipt).get_result()
         result_target = {
-            "platform": "bnb_pancakeswap",
-            "transaction_type": "remove-liquidity",
             "from_address": "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
             "to_address": "0x10ed43c718714eb63d5aa57b78b54704e256024e",
             "to_token_address": {"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",

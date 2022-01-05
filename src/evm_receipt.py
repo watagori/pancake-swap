@@ -30,8 +30,6 @@ class EvmReceipt(object):
 
         elif len(self.logs) == 1 and self.logs[0]["topics"][0] == ERC20_APPROVE_TOPIC:
             result = {
-                "platform": "bnb_pancakeswap",
-                "transaction_type": "approve",
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
             }
@@ -41,8 +39,6 @@ class EvmReceipt(object):
                 self.logs[2]['topics'][0] == ERC20_TRANSFER_TOPIC or\
                 self.logs[0]['topics'][0] == WETH_DEPOSIT_TOPIC:
             result = {
-                "platform": "bnb_pancakeswap",
-                "transaction_type": "exchange",
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
                 "from_token_address": self.logs[0]['address'].lower(),
@@ -57,8 +53,6 @@ class EvmReceipt(object):
         elif self.logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and\
                 self.logs[2]['topics'][0] == WETH_DEPOSIT_TOPIC:
             result = {
-                "platform": "bnb_pancakeswap",
-                "transaction_type": "add-liquidity",
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
                 "from_token_address": {self.logs[0]['address'].lower(),
@@ -75,8 +69,6 @@ class EvmReceipt(object):
         elif self.logs[0]['topics'][0] == ERC20_APPROVE_TOPIC and\
                 len(self.logs) != 1:
             result = {
-                "platform": "bnb_pancakeswap",
-                "transaction_type": "remove-liquidity",
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
                 "to_token_address": {self.logs[8]['address'].lower(),
