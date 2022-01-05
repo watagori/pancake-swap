@@ -102,3 +102,21 @@ class Transaction():
                 "comment": "pancakeswap remove liquidity"
             }
             return caaj_data
+
+    def get_caaj_fee(self):
+        caaj_data = {
+            "time": Header(self.header_data).get_time(),
+            "platfrom": "bnb_pancakeswap",
+            "transaction_id": Header(self.header_data).get_transaction_hash(),
+            "debit_title": "SPOT",
+            "debit_amount": {"BNB": Header(self.header_data).get_transaction_fee()},
+            "debit_from": "0x0000000000000000000000000000000000000000",
+            "debit_to": EvmReceipt(self.receipt_data).get_result()['from_address'],
+            "credit_title": "SPOT",
+            "credit_amount": {"BNB": Header(self.header_data).get_transaction_fee()},
+            "credit_from": EvmReceipt(self.receipt_data).get_result()['from_address'],
+            "credit_to": "0x0000000000000000000000000000000000000000",
+            "comment": "pancakeswap fee"
+
+        }
+        return caaj_data

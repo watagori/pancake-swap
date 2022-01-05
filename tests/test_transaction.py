@@ -124,3 +124,33 @@ class TestTransaction:
             "comment": "pancakeswap remove liquidity"
         }
         assert caaj_data == caaj_data_model
+
+    def test_get_caaj_fee_01(self):
+        file_name = "exchange_bnb_to_cake.json"
+        header_file = open("data/header/" + file_name,
+                           "r", encoding="utf-8")
+        header_data = json.load(header_file)
+        header_file.close()
+        receipt_file = open("data/receipt/" + file_name,
+
+                            "r", encoding="utf-8")
+        receipt_data = json.load(receipt_file)
+
+        receipt_file.close()
+        caaj_data = Transaction(header_data, receipt_data).get_caaj_fee()
+
+        caaj_data_model = {
+            "time": "2021-12-28-01:28:52",
+            "platfrom": "bnb_pancakeswap",
+            "transaction_id": "0x4f8534e85849cb54f0ae4ca0718939ab22de248f64e2e4dc607a76b12f20f109",
+            "debit_title": "SPOT",
+            "debit_amount": {"BNB": "0.00067182"},
+            "debit_from": "0x0000000000000000000000000000000000000000",
+            "debit_to": "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
+            "credit_title": "SPOT",
+            "credit_amount":  {"BNB": "0.00067182"},
+            "credit_from": "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
+            "credit_to": "0x0000000000000000000000000000000000000000",
+            "comment": "pancakeswap fee"
+        }
+        assert caaj_data == caaj_data_model
