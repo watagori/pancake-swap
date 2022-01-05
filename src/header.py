@@ -6,11 +6,11 @@ WEI = 1000000000000000000
 
 
 class Header(object):
-    def __init__(self, timestamp, gas_price, gas_used, fee_from):
-        self.timestamp = timestamp
-        self.gas_price = gas_price
-        self.gas_used = gas_used
-        self.fee_from = fee_from
+    def __init__(self, header):
+        self.timestamp = header['timeStamp']
+        self.gas_price = header['gasPrice']
+        self.gas_used = header['gasUsed']
+        self.fee_from = header['from']
 
     def get_time(self):
         time = datetime.fromtimestamp(

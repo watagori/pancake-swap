@@ -11,7 +11,7 @@ class TestHeader:
         header = json.load(file)
         file.close()
         time = Header(
-            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"]).get_time()
+            header).get_time()
         assert time == "2021-12-28-01:28:52"
 
     def test_get_fee_amount_01(self):
@@ -20,7 +20,7 @@ class TestHeader:
         header = json.load(file)
         file.close()
         transaction_fee = Header(
-            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"])\
+            header)\
             .get_transaction_fee()
         assert transaction_fee == "0.00067182"
 
@@ -30,7 +30,7 @@ class TestHeader:
         header = json.load(file)
         file.close()
         fee_from = Header(
-            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"])\
+            header)\
             .get_fee_from()
         assert fee_from == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
@@ -40,6 +40,6 @@ class TestHeader:
         header = json.load(file)
         file.close()
         fee_to = Header(
-            header["timeStamp"], header["gasPrice"], header["gasUsed"], header["from"])\
+            header)\
             .get_fee_to()
         assert fee_to == "0x0000000000000000000000000000000000000000"
