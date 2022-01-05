@@ -11,6 +11,7 @@ class Header(object):
         self.gas_price = header['gasPrice']
         self.gas_used = header['gasUsed']
         self.fee_from = header['from']
+        self.transaction_hash = header['hash']
 
     def get_time(self):
         time = datetime.fromtimestamp(
@@ -23,11 +24,9 @@ class Header(object):
         return transaction_fee
 
     def get_fee_from(self):
-        """Get transaction fee from EVM logs"""
         fee_from = self.fee_from
         return fee_from
 
-    def get_fee_to(self):
-        """Get transaction fee to EVM logs"""
-        fee_to = "0x0000000000000000000000000000000000000000"
-        return fee_to
+    def get_transaction_hash(self):
+        transaction_hash = self.transaction_hash
+        return transaction_hash

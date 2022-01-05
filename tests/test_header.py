@@ -34,12 +34,11 @@ class TestHeader:
             .get_fee_from()
         assert fee_from == "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
 
-    def test_get_fee_to_01(self):
+    def test_get_transaction_hash_01(self):
         file = open("data/header/exchange_bnb_to_cake.json",
                     "r", encoding="utf-8")
         header = json.load(file)
         file.close()
-        fee_to = Header(
-            header)\
-            .get_fee_to()
-        assert fee_to == "0x0000000000000000000000000000000000000000"
+        transaction_hash = Header(header).get_transaction_hash()
+        assert transaction_hash ==\
+            "0x4f8534e85849cb54f0ae4ca0718939ab22de248f64e2e4dc607a76b12f20f109"

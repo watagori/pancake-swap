@@ -26,10 +26,15 @@ class EvmReceipt(object):
 
     def get_result(self):
         if len(self.logs) == 0:
-            return "transfer"
+            result = {
+                'type': 'transfer',
+            }
+            return result
 
         elif len(self.logs) == 1 and self.logs[0]["topics"][0] == ERC20_APPROVE_TOPIC:
+            # approve
             result = {
+                'type': 'approve',
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
             }
@@ -38,7 +43,9 @@ class EvmReceipt(object):
         elif self.logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and\
                 self.logs[2]['topics'][0] == ERC20_TRANSFER_TOPIC or\
                 self.logs[0]['topics'][0] == WETH_DEPOSIT_TOPIC:
+            #  Ecchange
             result = {
+                'type': 'exchange',
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
                 "from_token_address": self.logs[0]['address'].lower(),
@@ -52,7 +59,9 @@ class EvmReceipt(object):
 
         elif self.logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and\
                 self.logs[2]['topics'][0] == WETH_DEPOSIT_TOPIC:
+            # Add liquidity
             result = {
+                'type': 'add_liquidity',
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
                 "from_token_address": {self.logs[0]['address'].lower(),
@@ -68,7 +77,9 @@ class EvmReceipt(object):
 
         elif self.logs[0]['topics'][0] == ERC20_APPROVE_TOPIC and\
                 len(self.logs) != 1:
+            # Remove liquidity
             result = {
+                'type': 'remove_liquidity',
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
                 "to_token_address": {self.logs[8]['address'].lower(),
