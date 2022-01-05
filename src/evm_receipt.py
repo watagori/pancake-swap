@@ -64,12 +64,12 @@ class EvmReceipt(object):
                 'type': 'add_liquidity',
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
-                "from_token_address": {self.logs[0]['address'].lower(),
-                                       self.logs[2]['address'].lower()},
+                "from_token_address": [self.logs[0]['address'].lower(),
+                                       self.logs[2]['address'].lower()],
                 "to_token_address": self.logs[5]['address'].lower(),
-                "from_token_amount": {str(Decimal(
+                "from_token_amount": [str(Decimal(
                     int(self.logs[2]["data"].lower(), 16))/Decimal(WEI)), str(Decimal(
-                        int(self.logs[0]["data"].lower(), 16))/Decimal(WEI))},
+                        int(self.logs[0]["data"].lower(), 16))/Decimal(WEI))],
                 "to_token_amount": str(Decimal(
                     int(self.logs[5]["data"].lower(), 16))/Decimal(WEI)),
             }
@@ -82,12 +82,12 @@ class EvmReceipt(object):
                 'type': 'remove_liquidity',
                 "from_address": self.from_address.lower(),
                 "to_address": self.to_address.lower(),
-                "to_token_address": {self.logs[8]['address'].lower(),
-                                     self.logs[9]['address'].lower()},
+                "to_token_address": [self.logs[8]['address'].lower(),
+                                     self.logs[9]['address'].lower()],
                 "from_token_address": self.logs[0]['address'].lower(),
-                "to_token_amount": {str(Decimal(
+                "to_token_amount": [str(Decimal(
                     int(self.logs[8]["data"].lower(), 16))/Decimal(WEI)), str(Decimal(
-                        int(self.logs[9]["data"].lower(), 16))/Decimal(WEI))},
+                        int(self.logs[9]["data"].lower(), 16))/Decimal(WEI))],
                 "from_token_amount": str(Decimal(
                     int(self.logs[0]["data"].lower(), 16))/Decimal(WEI)),
             }
