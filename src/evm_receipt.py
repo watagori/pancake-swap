@@ -19,112 +19,75 @@ WEI = 1000000000000000000
 
 
 class EvmReceipt(object):
-    def __init__(self, logs, from_address, to_address):
-        self.logs = logs
-        self.from_address = from_address
-        self.to_address = to_address
+    def __init__(self, receipt):
+        self.logs = receipt['logs']
+        self.from_address = receipt['from']
+        self.to_address = receipt['to']
 
-    def get_transaction_type(self):
-        """Get type of transaction from EVM logs"""
+    def get_result(self):
         if len(self.logs) == 0:
             return "transfer"
 
         elif len(self.logs) == 1 and self.logs[0]["topics"][0] == ERC20_APPROVE_TOPIC:
-            return "approve"
+            result = {
+                "platform": "bnb_pancakeswap",
+                "transaction_type": "approve",
+                "from_address": self.from_address.lower(),
+                "to_address": self.to_address.lower(),
+            }
+            return result
 
-        elif self.logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
-                self.logs[2]['topics'][0] == ERC20_TRANSFER_TOPIC or \
+        elif self.logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and\
+                self.logs[2]['topics'][0] == ERC20_TRANSFER_TOPIC or\
                 self.logs[0]['topics'][0] == WETH_DEPOSIT_TOPIC:
-            return "exchange"
+            result = {
+                "platform": "bnb_pancakeswap",
+                "transaction_type": "exchange",
+                "from_address": self.from_address.lower(),
+                "to_address": self.to_address.lower(),
+                "from_token_address": self.logs[0]['address'].lower(),
+                "to_token_address": self.logs[2]['address'].lower(),
+                "from_token_amount": str(Decimal(
+                    int(self.logs[0]["data"].lower(), 16))/Decimal(WEI)),
+                "to_token_amount": str(Decimal(
+                    int(self.logs[2]["data"].lower(), 16))/Decimal(WEI)),
+            }
+            return result
 
-        elif self.logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and \
+        elif self.logs[0]['topics'][0] == ERC20_TRANSFER_TOPIC and\
                 self.logs[2]['topics'][0] == WETH_DEPOSIT_TOPIC:
-            return "add-liquidity"
+            result = {
+                "platform": "bnb_pancakeswap",
+                "transaction_type": "add-liquidity",
+                "from_address": self.from_address.lower(),
+                "to_address": self.to_address.lower(),
+                "from_token_address": {self.logs[0]['address'].lower(),
+                                       self.logs[2]['address'].lower()},
+                "to_token_address": self.logs[5]['address'].lower(),
+                "from_token_amount": {str(Decimal(
+                    int(self.logs[2]["data"].lower(), 16))/Decimal(WEI)), str(Decimal(
+                        int(self.logs[0]["data"].lower(), 16))/Decimal(WEI))},
+                "to_token_amount": str(Decimal(
+                    int(self.logs[5]["data"].lower(), 16))/Decimal(WEI)),
+            }
+            return result
 
-        elif self.logs[0]['topics'][0] == ERC20_APPROVE_TOPIC and \
+        elif self.logs[0]['topics'][0] == ERC20_APPROVE_TOPIC and\
                 len(self.logs) != 1:
-            return "remove-liquidity"
+            result = {
+                "platform": "bnb_pancakeswap",
+                "transaction_type": "remove-liquidity",
+                "from_address": self.from_address.lower(),
+                "to_address": self.to_address.lower(),
+                "to_token_address": {self.logs[8]['address'].lower(),
+                                     self.logs[9]['address'].lower()},
+                "from_token_address": self.logs[0]['address'].lower(),
+                "to_token_amount": {str(Decimal(
+                    int(self.logs[8]["data"].lower(), 16))/Decimal(WEI)), str(Decimal(
+                        int(self.logs[9]["data"].lower(), 16))/Decimal(WEI))},
+                "from_token_amount": str(Decimal(
+                    int(self.logs[0]["data"].lower(), 16))/Decimal(WEI)),
+            }
+            return result
 
         return "unknown"
-
-    def get_from_address(self):
-        """Get from address of transaction from EVM logs"""
-        from_address = self.from_address.lower()
-        return from_address
-
-    def get_to_address(self):
-        """Get to address of transaction from EVM logs"""
-        to_address = self.to_address.lower()
-        return to_address
-
-    def get_exchange_credit_token(self):
-        """Get from token address of exchange transaction from EVM logs"""
-        token_address = self.logs[0]['address'].lower()
-        return token_address
-
-    def get_exchange_debit_token(self):
-        """Get to token address of exchange transaction from EVM logs"""
-        token_address = self.logs[2]['address'].lower()
-        return token_address
-
-    def get_exchange_credit_amount(self):
-        """Get credit amount of exchange transaction from EVM logs"""
-        credit_amount = str(Decimal(
-            int(self.logs[0]["data"].lower(), 16))/Decimal(WEI))
-        return credit_amount
-
-    def get_exchange_debit_amount(self):
-        """Get debit amount of exchange transaction from EVM logs"""
-        debit_amount = str(Decimal(
-            int(self.logs[2]["data"].lower(), 16))/Decimal(WEI))
-        return debit_amount
-
-    def get_liquidity_add_credit_token(self):
-        """Get from token address of liquidity add transaction from EVM logs"""
-        token_address_1 = self.logs[0]['address'].lower()
-        token_address_2 = self.logs[2]['address'].lower()
-        return {token_address_1, token_address_2}
-
-    def get_liquidity_add_debit_token(self):
-        """Get to token address of liquidity add transaction from EVM logs"""
-        token_address = self.logs[5]['address'].lower()
-        return token_address
-
-    def get_liquidity_add_credit_amount(self):
-        """Get credit amount of liquidity add transaction from EVM logs"""
-        credit_amount_1 = str(Decimal(
-            int(self.logs[0]["data"].lower(), 16))/Decimal(WEI))
-        credit_amount_2 = str(Decimal(
-            int(self.logs[2]["data"].lower(), 16))/Decimal(WEI))
-        return {credit_amount_1, credit_amount_2}
-
-    def get_liquidity_add_debit_amount(self):
-        """Get debit amount of liquidity add transaction from EVM logs"""
-        debit_amount = str(Decimal(
-            int(self.logs[5]["data"].lower(), 16))/Decimal(WEI))
-        return debit_amount
-
-    def get_liquidity_remove_credit_token(self):
-        """Get from token address of liquidity remove transaction from EVM logs"""
-        token_address = self.logs[0]['address'].lower()
-        return token_address
-
-    def get_liquidity_remove_debit_token(self):
-        """Get to token address of liquidity remove transaction from EVM logs"""
-        token_address_1 = self.logs[8]['address'].lower()
-        token_address_2 = self.logs[9]['address'].lower()
-        return {token_address_1, token_address_2}
-
-    def get_liquidity_remove_credit_amount(self):
-        """Get credit amount of liquidity remove transaction from EVM logs"""
-        credit_amount = str(Decimal(
-            int(self.logs[0]["data"].lower(), 16))/Decimal(WEI))
-        return credit_amount
-
-    def get_liquidity_remove_debit_amount(self):
-        """Get debit amount of liquidity remove transaction from EVM logs"""
-        debit_amount_1 = str(Decimal(
-            int(self.logs[8]["data"].lower(), 16))/Decimal(WEI))
-        debit_amount_2 = str(Decimal(
-            int(self.logs[9]["data"].lower(), 16))/Decimal(WEI))
-        return {debit_amount_1, debit_amount_2}
