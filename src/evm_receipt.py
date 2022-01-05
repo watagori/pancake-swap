@@ -68,8 +68,8 @@ class EvmReceipt(object):
                                        self.logs[2]['address'].lower()],
                 "to_token_address": self.logs[5]['address'].lower(),
                 "from_token_amount": [str(Decimal(
-                    int(self.logs[2]["data"].lower(), 16))/Decimal(WEI)), str(Decimal(
-                        int(self.logs[0]["data"].lower(), 16))/Decimal(WEI))],
+                    int(self.logs[0]["data"].lower(), 16))/Decimal(WEI)), str(Decimal(
+                        int(self.logs[2]["data"].lower(), 16))/Decimal(WEI))],
                 "to_token_amount": str(Decimal(
                     int(self.logs[5]["data"].lower(), 16))/Decimal(WEI)),
             }
