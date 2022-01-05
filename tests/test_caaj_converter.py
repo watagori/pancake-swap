@@ -1,4 +1,5 @@
 import json
+import csv
 from src.caaj_converter import CaajConverter
 
 
@@ -43,6 +44,7 @@ class TestCaajConverter:
             "credit_to": "0x0000000000000000000000000000000000000000",
             "comment": "pancakeswap fee"
         }]
+
         assert caaj_data == caaj_data_model
 
     def test_caaj_converter_02(self):

@@ -15,7 +15,7 @@ FILENAME = [
 ]
 TRANSACTION_NUMBER = 6
 ADDRESS = "0xda28ecfc40181a6dad8b52723035dfba3386d26e"
-ORDER = "ASC"
+ORDER = "asc"
 
 
 # Don't change the code below
