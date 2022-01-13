@@ -1,7 +1,7 @@
 """test evm logs file"""
+import re
 import json
 from src.evm_receipt import EvmReceipt
-import re
 
 
 class TestEvmReceipt:

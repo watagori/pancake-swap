@@ -1,17 +1,20 @@
 import csv
+import json
+from caaj_plugin.caaj_plugin import CaajPlugin
 from src.transaction import Transaction
 from src.header import Header
+
 
 PANCAKE_ADDRESS = ["0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
                    "0x10ed43c718714eb63d5aa57b78b54704e256024e"]
 
 
-class CaajConverter():
+class PancakePlugin(CaajPlugin):
     def __init__(self, header_data, receipt_data):
         self.header_data = header_data
         self.receipt_data = receipt_data
-
-    def get_caaj(self):
+a
+    def get_caajs(self, transaction: json, subject_address: str):
         swap_type = Header(self.header_data).get_transaction_to()
         if swap_type in PANCAKE_ADDRESS:
             caaj_data = Transaction(
@@ -25,6 +28,9 @@ class CaajConverter():
             return [caaj_data, caaj_data_fee]
         else:
             pass
+
+    def can_handle(self, transaction):
+        pass
 
 
 class WriteCaaj():

@@ -25,6 +25,7 @@ class EvmReceipt(object):
         self.to_address = receipt['to']
 
     def get_result(self):
+        print(type(self.logs))
         if len(self.logs) == 0:
             result = {
                 'type': 'transfer',

@@ -7,32 +7,28 @@ WEI = 1000000000000000000
 
 
 class Header(object):
+
     def __init__(self, header):
-        self.timestamp = header['timeStamp']
-        self.gas_price = header['gasPrice']
-        self.gas_used = header['gasUsed']
-        self.transaction_from = header['from']
-        self.transaction_to = header['to']
-        self.transaction_hash = header['hash']
+        self.header = header
 
     def get_time(self):
         time = datetime.fromtimestamp(
-            int(self.timestamp)).strftime('%Y-%m-%d-%H:%M:%S')
+            int(self.header['timeStamp'])).strftime('%Y-%m-%d-%H:%M:%S')
         return time
 
     def get_transaction_fee(self):
         transaction_fee = str(Decimal(
-            self.gas_price) * Decimal(self.gas_used)/Decimal(WEI))
+            self.header['gasPrice']) * Decimal(self.header['gasUsed'])/Decimal(WEI))
         return transaction_fee
 
     def get_transaction_from(self):
-        transaction_from = self.transaction_from
+        transaction_from = self.header['from']
         return transaction_from
 
     def get_transaction_hash(self):
-        transaction_hash = self.transaction_hash
+        transaction_hash = self.header['hash']
         return transaction_hash
 
     def get_transaction_to(self):
-        transaction_to = self.transaction_to
+        transaction_to = self.header['to']
         return transaction_to

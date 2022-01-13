@@ -1,6 +1,6 @@
 import json
 import csv
-from src.caaj_converter import CaajConverter
+from src.pancake_plugin import CaajConverter
 
 
 class TestCaajConverter:
