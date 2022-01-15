@@ -19,6 +19,7 @@ RUN pip install stellar-sdk
 RUN pip install symbol-sdk-core-python
 RUN pip install -U pytest
 RUN pip install pytest-cov
+RUN pip install python-dotenv
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 # COPY requirements.txt /tmp/pip-tmp/
 # RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
